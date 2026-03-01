@@ -34,7 +34,7 @@ datasets:
   use_time_branch: true
   use_spectrogram_branch: true
   use_text_branch: true
-  is_training: false
+  is_training: true
   noise_factor: 0.01
   time_shift_max: 0.1
   train_ratio: 0.7
@@ -80,5 +80,5 @@ trainer:
   log_dir: saved/logs
   plot_dir: saved/plots
   ckpt_name: model_best.pt
-  early_stopping: 0
+  early_stopping: 20
   resume: null

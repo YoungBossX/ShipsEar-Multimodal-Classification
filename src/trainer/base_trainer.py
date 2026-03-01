@@ -224,7 +224,7 @@ class BaseTrainer:
             return
         name = type(self.lr_scheduler).__name__
         if "ReduceLROnPlateau" in name:
-            monitor_val = log.get(self._monitor_metric or "val_loss")
+            monitor_val = log.get("val_loss")
             if monitor_val is not None:
                 self.lr_scheduler.step(monitor_val)
         else:

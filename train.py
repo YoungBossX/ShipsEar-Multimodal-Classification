@@ -100,7 +100,7 @@ def main(config: DictConfig) -> None:
     # 7. 损失函数 + 类别权重
     # ------------------------------------------------------------------
     loss_fn = instantiate(config.trainer.loss)
-    class_weights = get_class_weights(config).to(device)
+    class_weights = get_class_weights(config, dataloaders["train"]).to(device)
     loss_fn.weight = class_weights
 
     # ------------------------------------------------------------------

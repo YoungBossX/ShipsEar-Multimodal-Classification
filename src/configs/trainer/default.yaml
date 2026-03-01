@@ -12,7 +12,7 @@ do_infer: true
 
 # ---- 训练超参数 ----
 epochs:        100
-batch_size:    32     # 与 datasets.batch_size 保持一致（仅用于日志打印）
+batch_size:    32     # 与 datasets.batch_size 保持一致
 
 # ---- 优化器 ----
 optimizer:
@@ -54,7 +54,7 @@ plot_dir:    "saved/plots"
 ckpt_name:   "model_best.pt"  # inference 时加载的文件名
 
 # ---- Early stopping（0 = 禁用，对应原 disable_early_stopping=True）----
-early_stopping: 0
+early_stopping: 20
 
 # ---- Resume（留空则从头训练）----
 resume: null
