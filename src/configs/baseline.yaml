@@ -1,0 +1,21 @@
+# src/configs/baseline.yaml
+
+defaults:
+  - _self_
+  - model: multimodal_moe
+  - datasets: shipear
+  - trainer: default
+
+hydra:
+  run:
+    dir: .
+  job_logging:
+    root:
+      handlers: []
+
+# WandB writer
+writer:
+  _target_: src.logger.WandBWriter
+  project: ShipEar-Multimodal-Classification
+  entity: null
+  enabled: false    # 设为 true 开启 WandB 上传

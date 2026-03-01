@@ -1,0 +1,60 @@
+# src/configs/trainer/default.yaml
+
+# ---- 设备 ----
+device: cuda:0          # auto = 自动选 cuda:0 或 cpu
+
+# ---- 随机种子 ----
+seed: 42
+
+# ---- 训练控制 ----
+do_train: true
+do_infer: true
+
+# ---- 训练超参数 ----
+epochs:        100
+batch_size:    32     # 与 datasets.batch_size 保持一致（仅用于日志打印）
+
+# ---- 优化器 ----
+optimizer:
+  _target_:     torch.optim.AdamW
+  lr:           0.0001
+  weight_decay: 0.0001
+
+# ---- 学习率调度器 ----
+lr_scheduler:
+  _target_:   torch.optim.lr_scheduler.ReduceLROnPlateau
+  mode:        min
+  factor:      0.5
+  patience:    6
+  threshold:   0.0001
+  cooldown:    2
+  min_lr:      1.0e-6
+
+# ---- 损失函数 ----
+loss:
+  _target_: src.loss.WeightedCrossEntropyLoss
+  label_smoothing: 0.0
+
+# ---- 评估指标 ----
+metrics:
+  - _target_: src.metrics.Accuracy
+    name: accuracy
+  - _target_: src.metrics.MacroF1
+    name: macro_f1
+    num_classes: 5
+
+# ---- 监控指标（best model 追踪）----
+monitor: "max val_accuracy"   # 格式: "max <metric>" 或 "min <metric>"
+
+# ---- Checkpoint ----
+save_period: 50               # 每 N 个 epoch 保存一次 checkpoint
+save_dir:    "saved/checkpoints"
+log_dir:     "saved/logs"
+plot_dir:    "saved/plots"
+ckpt_name:   "model_best.pt"  # inference 时加载的文件名
+
+# ---- Early stopping（0 = 禁用，对应原 disable_early_stopping=True）----
+early_stopping: 0
+
+# ---- Resume（留空则从头训练）----
+resume: null

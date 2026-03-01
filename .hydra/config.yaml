@@ -1,0 +1,84 @@
+writer:
+  _target_: src.logger.WandBWriter
+  project: ShipEar-Multimodal-Classification
+  entity: null
+  enabled: false
+model:
+  _target_: src.model.Multimodal_MoE.MultimodalModel
+  fusion_embed_dim: 512
+  fusion_output_dim: 512
+  fusion_heads: 8
+  fusion_layers: 2
+  ff_multiplier: 4
+  dropout: 0.1
+  num_classes: 5
+  time_branch: null
+  spectrogram_branch: null
+  text_branch:
+    _target_: src.model.Multimodal_MoE.ClapTextBranch
+    pretrained_model_name: X:/数据集/Research_Project/Zero-Shot_Project/clap-htsat-unfused
+    local_files_only: true
+    target_dim: 512
+  classifier_kwargs:
+    expert_num: 8
+    top_k: 3
+    balance_wt: 0.01
+datasets:
+  annotations_file: X:/数据集/ShipEar/data_preprocessing/annotation/shipear_group_class_segmented_prompt_en_5_frame_Windows_16kHz_3s_0%.csv
+  mel_dir: X:/数据集/ShipEar/data_preprocessing/5_frame_Windows_3s_0%_16kHz_mel_feature
+  mfcc_dir: X:/数据集/ShipEar/data_preprocessing/6_frame_Windows_3s_0%_16kHz_mfcc_feature
+  mel_col: 7
+  mfcc_col: 7
+  text_col: 12
+  label_col: 5
+  use_time_branch: true
+  use_spectrogram_branch: true
+  use_text_branch: true
+  is_training: false
+  noise_factor: 0.01
+  time_shift_max: 0.1
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+  random_seed: 42
+  batch_size: 32
+  num_workers: 0
+  train_shuffle: true
+  val_shuffle: false
+  test_shuffle: false
+trainer:
+  device: cuda:0
+  seed: 42
+  do_train: true
+  do_infer: true
+  epochs: 100
+  batch_size: 32
+  optimizer:
+    _target_: torch.optim.AdamW
+    lr: 0.0001
+    weight_decay: 0.0001
+  lr_scheduler:
+    _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+    mode: min
+    factor: 0.5
+    patience: 6
+    threshold: 0.0001
+    cooldown: 2
+    min_lr: 1.0e-06
+  loss:
+    _target_: src.loss.WeightedCrossEntropyLoss
+    label_smoothing: 0.0
+  metrics:
+  - _target_: src.metrics.Accuracy
+    name: accuracy
+  - _target_: src.metrics.MacroF1
+    name: macro_f1
+    num_classes: 5
+  monitor: max val_accuracy
+  save_period: 50
+  save_dir: saved/checkpoints
+  log_dir: saved/logs
+  plot_dir: saved/plots
+  ckpt_name: model_best.pt
+  early_stopping: 0
+  resume: null
