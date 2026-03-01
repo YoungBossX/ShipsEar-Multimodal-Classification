@@ -74,9 +74,6 @@ weights/
 # *.pt Files
 *.pt
 **/*.pt
-checkpoints
-checkpoints_1
-checkpoints_2
 
 # *.log Files
 *.log
@@ -106,10 +103,13 @@ clap-htsat-unfused
 **/*.svg
 
 # .env文件
-.env
+*.env
 **/.env
 
 # .db文件
 *.db
 **/*.db
-.env
+
+# .txt文件
+*.txt
+**/*.txt
