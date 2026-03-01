@@ -62,7 +62,7 @@ class BaseTrainer:
             self._best_value = -float("inf") if self._monitor_mode == "max" else float("inf")
 
         # --- early stopping ---
-        self._early_stop_patience = int(getattr(config, "early_stop", 0))
+        self._early_stop_patience = int(getattr(config, "early_stopping", 0))
         self._early_stop_counter = 0
 
         # --- resume ---

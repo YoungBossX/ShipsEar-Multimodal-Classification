@@ -5,10 +5,10 @@ import os
 import random
 from datetime import datetime
 from pathlib import Path
-
 import numpy as np
 import torch
 
+PROJECT_NAME = Path(__file__).resolve().parents[2].name
 
 def set_random_seed(seed: int) -> None:
     """Fix seed for reproducibility (identical to template's set_random_seed)."""
@@ -36,7 +36,7 @@ def setup_saving_and_logging(config) -> logging.Logger:
     log_dir.mkdir(parents=True, exist_ok=True)
 
     timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-    log_file = log_dir / f"shipear_{timestamp}.log"
+    log_file = log_dir / f"{PROJECT_NAME}_{timestamp}.log"
 
     # ---- formatter ----
     formatter = logging.Formatter(
@@ -45,7 +45,7 @@ def setup_saving_and_logging(config) -> logging.Logger:
     )
 
     # ---- root logger ----
-    logger = logging.getLogger("shipear")
+    logger = logging.getLogger(PROJECT_NAME)
     logger.setLevel(logging.DEBUG)
 
     if not logger.handlers:

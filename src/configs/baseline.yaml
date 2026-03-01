@@ -11,7 +11,8 @@ hydra:
     dir: .
   job_logging:
     root:
-      handlers: []
+      disable_existing_loggers: false
+      handlers: null
 
 # WandB writer
 writer:

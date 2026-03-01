@@ -1,16 +1,11 @@
 # -*-coding: utf-8 -*-
-# train.py
 
 import warnings
-
 import hydra
 import torch
 from hydra.utils import instantiate
 from omegaconf import DictConfig, OmegaConf
 from prettytable import PrettyTable
-from sklearn.utils.class_weight import compute_class_weight
-import numpy as np
-
 from src.datasets.data_utils import get_dataloaders, get_class_weights
 from src.trainer.trainer import Trainer
 from src.utils.init_utils import set_random_seed, setup_saving_and_logging
@@ -102,7 +97,7 @@ def main(config: DictConfig) -> None:
     optimizer = instantiate(config.trainer.optimizer, params=model.parameters())
 
     # ------------------------------------------------------------------
-    # 7. 损失函数 + 类别权重（对应原 compute_class_weights + CrossEntropyLoss）
+    # 7. 损失函数 + 类别权重
     # ------------------------------------------------------------------
     loss_fn = instantiate(config.trainer.loss)
     class_weights = get_class_weights(config).to(device)
