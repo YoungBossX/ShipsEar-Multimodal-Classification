@@ -5,6 +5,7 @@ import numpy as np
 import torch
 from sklearn.metrics import accuracy_score
 from tqdm import tqdm
+from src.utils.visualization import plot_loss_accuracy_curves
 from .base_trainer import BaseTrainer
 
 class Trainer(BaseTrainer):
@@ -81,8 +82,12 @@ class Trainer(BaseTrainer):
                     )
                     break
 
-        # 绘制曲线（与原来 plot_loss_accuracy_curves 完全一致）
-        self.plot_loss_accuracy_curves(train_losses, val_losses, train_accs, val_accs)
+        # 绘制曲线
+        plot_loss_accuracy_curves(
+            train_losses, val_losses, train_accs, val_accs,
+            save_dir=self.config.plot_dir,
+            logger=self.logger,
+        )
 
         if self.writer is not None:
             self.writer.finish()
@@ -200,41 +205,3 @@ class Trainer(BaseTrainer):
         if (txt := batch.get("text")) is not None:
             kwargs["texts"] = txt
         return kwargs
-
-    def plot_loss_accuracy_curves(
-        self,
-        train_losses: list,
-        val_losses: list,
-        train_accs: list,
-        val_accs: list,
-    ) -> None:
-        """与原 plot_loss_accuracy_curves() 完全一致。"""
-        plt.figure(figsize=(12, 8))
-
-        plt.subplot(2, 1, 1)
-        plt.plot(train_losses, label="Train Loss", color="blue")
-        plt.plot(val_losses, label="Validation Loss", color="red")
-        plt.title("Training and Validation Loss")
-        plt.xlabel("Epoch")
-        plt.ylabel("Loss")
-        plt.legend()
-        plt.grid()
-        plt.gca().xaxis.set_major_locator(plt.MaxNLocator(integer=True))
-
-        plt.subplot(2, 1, 2)
-        plt.plot(np.array(train_accs) / 100, label="Train Accuracy", color="blue")
-        plt.plot(np.array(val_accs) / 100, label="Validation Accuracy", color="red")
-        plt.title("Training and Validation Accuracy")
-        plt.xlabel("Epoch")
-        plt.ylabel("Accuracy")
-        plt.legend()
-        plt.grid()
-        plt.gca().xaxis.set_major_locator(plt.MaxNLocator(integer=True))
-
-        plt.tight_layout()
-        plot_dir = getattr(self.config, "plot_dir", self.config.save_dir)
-        os.makedirs(plot_dir, exist_ok=True)
-        save_path = os.path.join(plot_dir, "loss_accuracy_curves.png")
-        plt.savefig(save_path, dpi=300, bbox_inches="tight")
-        plt.show()
-        self.logger.info("Loss curves saved to %s", save_path)

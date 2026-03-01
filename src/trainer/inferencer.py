@@ -13,6 +13,7 @@ from sklearn.metrics import (
     confusion_matrix,
     precision_recall_fscore_support,
 )
+from src.utils.visualization import plot_confusion_matrix
 from tqdm import tqdm
 
 class Inferencer:
@@ -55,33 +56,8 @@ class Inferencer:
         )
 
     # ------------------------------------------------------------------
-    # 混淆矩阵绘制（与原代码完全一致）
-    # ------------------------------------------------------------------
-
-    def plot_confusion_matrix(self, cm, class_names, title, save_path=None) -> None:
-        plt.figure(figsize=(12, 8))
-        sns.heatmap(
-            cm,
-            annot=True,
-            fmt="d",
-            cmap="Blues",
-            xticklabels=class_names,
-            yticklabels=class_names,
-            cbar_kws={"label": "Count"},
-        )
-        plt.title(title)
-        plt.xlabel("Predicted label")
-        plt.ylabel("True label")
-        plt.tight_layout()
-        if save_path:
-            plt.savefig(save_path, dpi=300, bbox_inches="tight")
-            self.logger.info("Confusion matrix saved to: %s", save_path)
-        plt.show()
-
-    # ------------------------------------------------------------------
     # 推理主流程（与原代码完全一致）
     # ------------------------------------------------------------------
-
     def predict(self) -> None:
         self.logger.info("******  Running infer  ******")
 
@@ -182,11 +158,12 @@ class Inferencer:
         cm = confusion_matrix(labels, predictions)
         os.makedirs(self.plot_dir, exist_ok=True)
         save_path = os.path.join(self.plot_dir, "confusion_matrix.png")
-        self.plot_confusion_matrix(
+        plot_confusion_matrix(
             cm,
             class_names=self.class_names,
             title="Confusion Matrix for this Model",
-            save_path=save_path,
+            save_dir=self.plot_dir,
+            logger=self.logger,
         )
         self.logger.info("Confusion Matrix:\n%s", str(cm))
         self.logger.info(
