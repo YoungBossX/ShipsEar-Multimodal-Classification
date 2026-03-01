@@ -4,8 +4,8 @@ defaults:
   - _self_
   - model: multimodal_moe
   - datasets: shipear
-  - trainer: default
-  - inference: inference
+  - trainer: train
+  - inferencer: infer
 
 hydra:
   run:

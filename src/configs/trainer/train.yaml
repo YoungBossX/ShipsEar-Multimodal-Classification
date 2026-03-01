@@ -1,4 +1,4 @@
-# src/configs/trainer/default.yaml
+# src/configs/trainer/train.yaml
 
 # ---- 设备 ----
 device: cuda:0          # auto = 自动选 cuda:0 或 cpu

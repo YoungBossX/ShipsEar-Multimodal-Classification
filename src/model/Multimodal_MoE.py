@@ -12,7 +12,6 @@ Tensor = torch.Tensor
 # ======================================================================
 # 各模态分支
 # ======================================================================
-
 class TimeConformerBranch(nn.Module):
     """Conformer encoder for 1D audio (Mel) features."""
 
@@ -155,7 +154,6 @@ class ClapTextBranch(nn.Module):
 # ======================================================================
 # 融合模块
 # ======================================================================
-
 class CrossAttentionBlock(nn.Module):
     def __init__(self, embed_dim, num_heads, dropout=0.1, ff_multiplier=4):
         super().__init__()
@@ -259,9 +257,8 @@ class TopKMoEClassifier(nn.Module):
 
 
 # ======================================================================
-# 顶层多模态模型（与原代码接口完全一致）
+# 顶层多模态模型
 # ======================================================================
-
 class MultimodalModel(nn.Module):
     """
     Complete multimodal encoder with cross-attention fusion + MoE classifier.
@@ -301,6 +298,7 @@ class MultimodalModel(nn.Module):
                 "text": nn.LayerNorm(fusion_embed_dim),
             }
         )
+        
         self.fusion_head = CrossAttentionFusionHead(
             embed_dim=fusion_embed_dim,
             num_heads=fusion_heads,
@@ -309,6 +307,7 @@ class MultimodalModel(nn.Module):
             ff_multiplier=ff_multiplier,
             output_dim=fusion_output_dim,
         )
+
         kw = dict(classifier_kwargs or {})
         kw.setdefault("input_dim", fusion_output_dim)
         kw.setdefault("output_dim", num_classes)

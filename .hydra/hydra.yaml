@@ -141,7 +141,8 @@ hydra:
       provider: schema
     output_dir: x:\Git_Clone\ShipsEar-Multimodal-Classification
     choices:
-      trainer: default
+      inferencer: infer
+      trainer: train
       datasets: shipear
       model: multimodal_moe
       hydra/env: default
