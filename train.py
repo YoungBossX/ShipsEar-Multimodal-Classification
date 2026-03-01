@@ -9,6 +9,7 @@ from prettytable import PrettyTable
 from src.datasets.data_utils import get_dataloaders, get_class_weights
 from src.trainer.trainer import Trainer
 from src.utils.init_utils import set_random_seed, setup_saving_and_logging
+from src.trainer.inferencer import Inferencer
 
 warnings.filterwarnings("ignore", category=UserWarning)
 
@@ -159,9 +160,8 @@ def main(config: DictConfig) -> None:
     # 12. 推理
     # ------------------------------------------------------------------
     if config.trainer.do_infer:
-        from inference import Inference
-        inference = Inference(config, dataloaders["test"], model, device, logger)
-        inference.predict()
+        inferencer = Inferencer(config, dataloaders["test"], model, device, logger)
+        inferencer.predict()
 
 
 # ------------------------------------------------------------------

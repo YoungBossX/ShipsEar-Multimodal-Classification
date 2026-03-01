@@ -1,0 +1,12 @@
+# src/configs/inference.yaml
+
+# ---- 加载哪个 checkpoint ----
+save_dir:   "saved/checkpoints"
+ckpt_name:  "model_best.pt"
+plot_dir:   "saved/plots"
+
+# ---- 推理设备 ----
+device: cuda:0    # 可改为 cpu 或 auto
+
+# ---- 类别名称 ----
+class_names: ["A", "B", "C", "D", "E"]
