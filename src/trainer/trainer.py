@@ -21,16 +21,10 @@ class Trainer(BaseTrainer):
         self.logger.info("Num Epochs    = %d", self.config.epochs)
         self.logger.info("Batch size    = %d", self.config.batch_size)
         self.logger.info("Learning rate = %s", self.config.optimizer.lr)
-        self.logger.info(
-            "Early stop    = %s",
-            self._early_stop_patience if self._early_stop_patience > 0 else "disabled",
-        )
+        self.logger.info("Early stop    = %s",self._early_stop_patience if self._early_stop_patience > 0 else "disabled")
 
         for epoch in range(1, self.config.epochs + 1):
-            self.logger.info(
-                "-------------------- Epoch: %d/%d --------------------",
-                epoch, self.config.epochs,
-            )
+            self.logger.info("******************** Epoch: %d/%d ********************", epoch, self.config.epochs)
 
             train_log = self._train_epoch(epoch)
             val_log = self._valid_epoch(epoch)

@@ -34,7 +34,6 @@ def plot_loss_accuracy_curves(
     os.makedirs(save_dir, exist_ok=True)
     save_path = os.path.join(save_dir, "loss_accuracy_curves.png")
     plt.savefig(save_path, dpi=300, bbox_inches="tight")
-    plt.show()
     if logger:
         logger.info("Loss curves saved to %s", save_path)
 
@@ -57,6 +56,5 @@ def plot_confusion_matrix(cm, class_names, title, save_dir, logger=None):
     os.makedirs(save_dir, exist_ok=True)
     save_path = os.path.join(save_dir, "confusion_matrix.png")
     plt.savefig(save_path, dpi=300, bbox_inches="tight")
-    plt.show()
     if logger:
         logger.info("Confusion matrix saved to: %s", save_path)

@@ -11,7 +11,7 @@ do_train: true
 do_infer: true
 
 # ---- 训练超参数 ----
-epochs:        100
+epochs:        1
 batch_size:    32     # 与 datasets.batch_size 保持一致
 
 # ---- 优化器 ----
