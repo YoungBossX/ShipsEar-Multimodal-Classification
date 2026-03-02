@@ -217,6 +217,5 @@ def _print_branch_status(config, train_loader) -> None:
 
     print(f"{table}\n")
 
-
 if __name__ == "__main__":
     main()
