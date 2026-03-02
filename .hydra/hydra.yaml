@@ -100,7 +100,6 @@ hydra:
     root:
       level: INFO
       handlers: []
-      disable_existing_loggers: false
     disable_existing_loggers: false
   env: {}
   mode: RUN
@@ -128,7 +127,7 @@ hydra:
   runtime:
     version: 1.3.2
     version_base: '1.3'
-    cwd: X:\Git_Clone\ShipsEar-Multimodal-Classification
+    cwd: x:\Git_Clone\ShipsEar-Multimodal-Classification
     config_sources:
     - path: hydra.conf
       schema: pkg
@@ -139,7 +138,7 @@ hydra:
     - path: ''
       schema: structured
       provider: schema
-    output_dir: X:\Git_Clone\ShipsEar-Multimodal-Classification
+    output_dir: x:\Git_Clone\ShipsEar-Multimodal-Classification
     choices:
       inferencer: infer
       trainer: train

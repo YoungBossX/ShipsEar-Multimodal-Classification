@@ -13,7 +13,7 @@ from sklearn.metrics import (
     confusion_matrix,
     precision_recall_fscore_support,
 )
-from src.utils.visualization import plot_confusion_matrix
+from src.utils.visualization import plot_confusion_matrix, plot_roc_curves, plot_per_class_metrics, plot_tsne, plot_moe_expert_activation
 from tqdm import tqdm
 
 class Inferencer:
@@ -62,6 +62,8 @@ class Inferencer:
         self.logger.info("******  Running infer  ******")
 
         all_predictions, all_probabilities, all_labels = [], [], []
+        all_features = []
+        all_routing_weights = [] 
 
         self.model.eval()
         test_bar = tqdm(self.test_dataloader, desc="Testing")
@@ -74,6 +76,14 @@ class Inferencer:
                 all_labels.extend(labels.cpu().numpy())
                 outputs = self.model(**kwargs)
                 logits = outputs["logits"]
+
+                fusion_feat = outputs.get("fusion")
+                routing_prob = torch.softmax(
+                    self.model.classifier.routing(fusion_feat), dim=-1
+                )
+                all_routing_weights.append(routing_prob.cpu().numpy())
+                if fusion_feat is not None:
+                    all_features.extend(fusion_feat.cpu().numpy())
 
                 probs = F.softmax(logits, dim=1)
                 all_probabilities.extend(probs.cpu().numpy())
@@ -170,6 +180,30 @@ class Inferencer:
             "Classification Report:\n%s",
             classification_report(labels, predictions, digits=2),
         )
+
+        # ROC 曲线（需要 probabilities）
+        plot_roc_curves(labels, np.array(all_probabilities), self.class_names, self.plot_dir, self.logger)
+
+        # 每类别 P/R/F1 柱状图
+        plot_per_class_metrics(precision, recall, f1, self.class_names, self.plot_dir, self.logger)
+
+        # t-SNE（需要收集 fusion 特征，在推理循环里额外保存 outputs["fusion"]）
+        plot_tsne(np.array(all_features), labels, self.class_names, self.plot_dir, logger=self.logger)
+
+       # MoE 专家激活热力图（需要收集 routing 权重，在推理循环里额外保存 routing_prob）
+        routing_weights = np.vstack(all_routing_weights)   # (N, expert_num)
+        num_classes = len(self.class_names)
+        expert_num = routing_weights.shape[1]
+        class_routing = np.zeros((num_classes, expert_num))
+
+        for i in range(num_classes):
+            mask = labels == i
+            if mask.sum() > 0:
+                class_routing[i] = routing_weights[mask].mean(axis=0)
+        plot_moe_expert_activation(class_routing, self.class_names, self.plot_dir, self.logger)
+
+        # 
+
         self.logger.info("******  Finishing evaluate  ******")
 
     def _batch_to_kwargs(self, batch: dict) -> dict:
