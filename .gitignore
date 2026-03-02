@@ -58,9 +58,6 @@ yarn.lock
 # Local Environment Files
 *.local
 
-# Dataset Files
-datasets/
-
 # Pycache
 __pycache__/
 

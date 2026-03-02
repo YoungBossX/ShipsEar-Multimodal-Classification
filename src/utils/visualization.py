@@ -193,7 +193,7 @@ def plot_tsne(features, labels, class_names, save_dir, perplexity=30, logger=Non
     if logger:
         logger.info("Running t-SNE (this may take a while)...")
 
-    tsne = TSNE(n_components=2, perplexity=perplexity, random_state=42, max_iter=1000)
+    tsne = TSNE(n_components=2, perplexity=perplexity, random_state=42, max_iter=1000, n_jobs=1)
     features_2d = tsne.fit_transform(features)
 
     fig, ax = plt.subplots(figsize=(9, 8))
@@ -211,7 +211,6 @@ def plot_tsne(features, labels, class_names, save_dir, perplexity=30, logger=Non
             marker=markers[i % len(markers)],
             edgecolors="white",
             linewidths=0.4,
-            n_jobs=8,
         )
 
     ax.set_title("t-SNE Visualization of Fusion Features")

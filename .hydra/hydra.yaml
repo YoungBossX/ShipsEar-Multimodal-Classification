@@ -76,7 +76,7 @@ hydra:
         formatter: simple
         stream: ext://sys.stdout
     root:
-      level: INFO
+      level: WARNING
       handlers:
       - console
     loggers:
@@ -87,7 +87,7 @@ hydra:
     version: 1
     formatters:
       simple:
-        format: '[%(asctime)s][%(name)s][%(levelname)s] - %(message)s'
+        format: '%(message)s'
     handlers:
       console:
         class: logging.StreamHandler
@@ -99,7 +99,8 @@ hydra:
         filename: ${hydra.runtime.output_dir}/${hydra.job.name}.log
     root:
       level: INFO
-      handlers: []
+      handlers:
+      - console
     disable_existing_loggers: false
   env: {}
   mode: RUN

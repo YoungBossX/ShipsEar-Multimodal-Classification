@@ -51,7 +51,7 @@ trainer:
   seed: 42
   do_train: true
   do_infer: true
-  epochs: 1
+  epochs: 100
   batch_size: 32
   optimizer:
     _target_: torch.optim.AdamW

@@ -1,0 +1,37 @@
+# src/configs/datasets/shipear.yaml
+
+# ---- 数据路径（修改为你的实际路径）----
+annotations_file: "X:/数据集/ShipEar/data_preprocessing/annotation/shipear_group_class_segmented_prompt_en_5_frame_Windows_16kHz_3s_0%.csv"
+mel_dir:  "X:/数据集/ShipEar/data_preprocessing/5_frame_Windows_3s_0%_16kHz_mel_feature"
+mfcc_dir: "X:/数据集/ShipEar/data_preprocessing/6_frame_Windows_3s_0%_16kHz_mfcc_feature"
+
+# ---- CSV 列索引 ----
+mel_col:   7
+mfcc_col:  7
+text_col:  12
+label_col: 5
+
+# ---- 分支开关 ----
+use_time_branch:         true
+use_spectrogram_branch:  true
+use_text_branch:         true
+
+# ---- 训练集是否开增强（对应原代码注释掉的 is_training=True）----
+is_training: true
+
+# ---- 数据增强参数 ----
+noise_factor:    0.01
+time_shift_max:  0.1 
+
+# ---- 数据集划分比例 ----
+train_ratio: 0.70
+val_ratio:   0.15
+test_ratio:  0.15
+random_seed: 42
+
+# ---- DataLoader 参数 ----
+batch_size:    32
+num_workers:   0
+train_shuffle: true
+val_shuffle:   false
+test_shuffle:  false

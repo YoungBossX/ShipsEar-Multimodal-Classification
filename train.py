@@ -1,6 +1,10 @@
 # -*-coding: utf-8 -*-
 
 import warnings
+import os
+import atexit
+atexit.register(lambda: os.remove("train.log")
+                if os.path.exists("train.log") else None)
 import hydra
 import torch
 from hydra.utils import instantiate
