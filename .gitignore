@@ -110,3 +110,7 @@ clap-htsat-unfused
 # .txt文件
 *.txt
 **/*.txt
+
+# .claude文件
+*.claude
+**/*.claude
