@@ -10,6 +10,7 @@ defaults:
 hydra:
   run:
     dir: .
+  output_subdir: null          # 不生成 .hydra/ 目录
   job_logging:
     version: 1
     disable_existing_loggers: false
@@ -21,6 +22,8 @@ hydra:
         class: logging.StreamHandler
         formatter: simple
         stream: ext://sys.stdout
+      file:                    # 覆盖默认 file handler，阻止生成 train.log
+        class: logging.NullHandler
     root:
       level: INFO
       handlers: [console]
@@ -31,6 +34,8 @@ hydra:
       console:
         class: logging.StreamHandler
         stream: ext://sys.stdout
+      file:                    # 覆盖默认 file handler，阻止生成 hydra.log
+        class: logging.NullHandler
     root:
       level: WARNING
       handlers: [console]

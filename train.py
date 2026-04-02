@@ -2,9 +2,6 @@
 
 import warnings
 import os
-import atexit
-atexit.register(lambda: os.remove("train.log")
-                if os.path.exists("train.log") else None)
 import hydra
 import torch
 from hydra.utils import instantiate
@@ -175,7 +172,7 @@ def main(config: DictConfig) -> None:
 def _print_branch_status(config, train_loader) -> None:
     """打印各模态分支的加载状态表。"""
     ds_cfg = config.datasets
-    subset = train_loader.dataset          # torch.utils.data.Subset
+    subset = train_loader.dataset
     sample = subset.dataset[subset.indices[0]]
 
     print("Multimodal branches loading status:")
