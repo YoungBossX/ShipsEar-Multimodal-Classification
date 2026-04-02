@@ -45,7 +45,7 @@ class Inferencer:
         self.logger = logger
 
         # plot_dir: 优先读 config.inference，回退到 config.trainer
-        infer_cfg = getattr(config, "inference", None)
+        infer_cfg = getattr(config, "inferencer", None)
         trainer_cfg = getattr(config, "trainer", config)
         self.plot_dir = (
             getattr(infer_cfg, "plot_dir", None)

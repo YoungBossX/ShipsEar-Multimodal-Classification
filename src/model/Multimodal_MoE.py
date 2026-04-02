@@ -108,8 +108,6 @@ class ClapTextBranch(nn.Module):
             pretrained_model_name, local_files_only=local_files_only
         )
         self.text_model.eval()
-        self._device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        self.text_model.to(self._device)
 
         text_dim = self._infer_text_dim()
         self.proj = (
@@ -140,7 +138,8 @@ class ClapTextBranch(nn.Module):
         inputs = self.processor(
             text=list(texts), return_tensors="pt", padding=True, truncation=True
         )
-        inputs = {k: v.to(self._device) for k, v in inputs.items()}
+        device = next(self.text_model.parameters()).device
+        inputs = {k: v.to(device) for k, v in inputs.items()}
         with torch.no_grad():
             embeddings = self.text_model.get_text_features(**inputs)
         return self.proj(embeddings)

@@ -106,9 +106,14 @@ def _multimodal_collate_fn(batch: list) -> dict:
     其余 Tensor 字段正常 stack。
     """
     collated = {}
-    keys = batch[0].keys()
-    for key in keys:
-        values = [item[key] for item in batch]
+    all_keys = set()
+    for item in batch:
+        all_keys.update(item.keys())
+    for key in all_keys:
+        values = [item.get(key) for item in batch]
+        if any(v is None for v in values):
+            # 该 key 在部分样本中缺失，跳过整个 key
+            continue
         if isinstance(values[0], torch.Tensor):
             collated[key] = torch.stack(values)
         else:

@@ -21,7 +21,7 @@ def main(config: DictConfig) -> None:
     logger = setup_saving_and_logging(config)
 
     # 设备：优先读 inference.device，回退到 trainer.device
-    infer_cfg = getattr(config, "inference", None)
+    infer_cfg = getattr(config, "inferencer", None)
     raw_device = (
         getattr(infer_cfg, "device", None) or config.trainer.device
     )
